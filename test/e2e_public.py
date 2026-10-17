@@ -23,10 +23,13 @@ with sync_playwright() as p:
         pg.click(f'[data-testid=approve-{f}]')
     pg.click('[data-testid=confirm]')
     res['result'] = pg.inner_text('[data-testid=result]')
+    with pg.expect_download() as dl:
+        pg.click('[data-testid=export]')
+    res['csv'] = open(dl.value.path(), 'rb').read().decode('utf-8-sig')
     res['console_errors'] = errs
     pg.screenshot(path=os.path.join(HERE, '..', 'out', 'public-open.png'))
     b.close()
-res['pass'] = res['status'] == 200 and res['confirm_disabled_before'] and '배차표에 올렸어요' in res['result'] and '양산' in res['result'] and not errs
+res['pass'] = res['status'] == 200 and res['confirm_disabled_before'] and '배차표에 올렸어요' in res['result'] and '양산' in res['result'] and '양산,울산,2026-10-21 15:00,2.5' in res['csv'] and not errs
 json.dump(res, open(os.path.join(HERE, '..', 'out', 'e2e-public.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 print(json.dumps(res, ensure_ascii=False, indent=1))
 sys.exit(0 if res['pass'] else 1)

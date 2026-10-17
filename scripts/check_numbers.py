@@ -14,12 +14,12 @@ res = {'checks': [], 'forbidden': []}
 def need(name, hay_name, hay, token):
     ok = token in hay
     res['checks'].append({'name': name, 'in': hay_name, 'token': token, 'ok': ok})
-for tok in [f"{fu['accuracy_pct']}", f"{fu['docs']}건", f"{F['liar']['cells']}칸", f"{F['docs_total']}건", f"{fu['wrong']}칸", f"{fu['handoff']}칸", f"{fu['blank']}칸"]:
+FL, MK = F['flow'], F['market']
+for tok in [f"{fu['accuracy_pct']}", f"{fu['wrong']}칸", f"{F['liar']['cells']}칸", f"{FL['docs']}건", f"{MK['workers_per_firm']}명", f"{P['month_won']:,}원"]:
     need('영상 자막', 'subs', subs, tok)
-need('가격', 'subs', subs, f"{P['month_won']:,}원")
-need('본전 건수', 'screen', screen, f"{P['breakeven_errors_per_month']}건")
-need('가짜 추출기 화면', 'screen', screen, f"{F['liar']['rejected']} / {F['liar']['cells']}")
-for tok in [f"{fu['accuracy_pct']}", f"{F['liar']['cells']}", f"{P['month_won']:,}", f"{P['breakeven_errors_per_month']}", f"{fu['docs']}건"]:
+for tok in [f"{P['breakeven_errors_per_month']}건", f"{F['liar']['rejected']} / {F['liar']['cells']}", f"{MK['freight_firms']:,}", f"{MK['freight_workers']:,}", f"{FL['manual_steps']}단계", f"{FL['blind_wrong_cells']}건 (맹목 승인 기준)", FL['manual_error']]:
+    need('화면 글', 'screen', screen, tok)
+for tok in [f"{fu['accuracy_pct']}", f"{F['liar']['cells']}", f"{P['month_won']:,}", f"{P['breakeven_errors_per_month']}", f"{FL['docs']}건", f"{MK['freight_firms']:,}"]:
     need('매니페스트 주장', 'deliverable.json', manifest, tok)
 need('평가 파일 합성 표기', '평가.md', evalmd, '독립 채점이 아니다')
 BAD = ['[[', 'projects/', '메인 판단', 'TODO', '발송 전 지울', '회신 대기', '다음 레인']

@@ -9,7 +9,7 @@
   {
    "name": "영상 자막",
    "in": "subs",
-   "token": "37건",
+   "token": "4칸",
    "ok": true
   },
   {
@@ -27,37 +27,55 @@
   {
    "name": "영상 자막",
    "in": "subs",
-   "token": "4칸",
+   "token": "1.9명",
    "ok": true
   },
   {
    "name": "영상 자막",
-   "in": "subs",
-   "token": "14칸",
-   "ok": true
-  },
-  {
-   "name": "영상 자막",
-   "in": "subs",
-   "token": "8칸",
-   "ok": true
-  },
-  {
-   "name": "가격",
    "in": "subs",
    "token": "59,000원",
    "ok": true
   },
   {
-   "name": "본전 건수",
+   "name": "화면 글",
    "in": "screen",
    "token": "0.54건",
    "ok": true
   },
   {
-   "name": "가짜 추출기 화면",
+   "name": "화면 글",
    "in": "screen",
    "token": "228 / 228",
+   "ok": true
+  },
+  {
+   "name": "화면 글",
+   "in": "screen",
+   "token": "414,344",
+   "ok": true
+  },
+  {
+   "name": "화면 글",
+   "in": "screen",
+   "token": "791,582",
+   "ok": true
+  },
+  {
+   "name": "화면 글",
+   "in": "screen",
+   "token": "6단계",
+   "ok": true
+  },
+  {
+   "name": "화면 글",
+   "in": "screen",
+   "token": "0건 (맹목 승인 기준)",
+   "ok": true
+  },
+  {
+   "name": "화면 글",
+   "in": "screen",
+   "token": "미측정",
    "ok": true
   },
   {
@@ -87,7 +105,13 @@
   {
    "name": "매니페스트 주장",
    "in": "deliverable.json",
-   "token": "37건",
+   "token": "57건",
+   "ok": true
+  },
+  {
+   "name": "매니페스트 주장",
+   "in": "deliverable.json",
+   "token": "414,344",
    "ok": true
   },
   {

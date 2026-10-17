@@ -5,6 +5,7 @@
 
 - 시연: https://ryugi62.github.io/dispatch-intake/ (`index.html`) (설치·로그인 없음, 모든 계산은 브라우저 안에서만 — 요청 문서가 서버로 나가지 않습니다). 「내 요청 붙여넣기」에 직접 문장을 넣어 볼 수 있습니다.
 - 한계: 모든 문서는 지어낸 합성 문서이고 현장 실증은 없습니다. 추출기는 규칙 기반 시연용이며, 사진·손글씨는 읽지 못합니다. 언어모델 추출기는 측정하지 않았습니다.
-- 측정: `node scripts/measure.js` → `out/facts.json`. 미리 안 본 문서 첫 실행 기록은 `samples/FIRST-RUN.md`.
+- 내보내기: 승인해 올린 배차표 행을 「엑셀(CSV)로 내보내기」로 내려받습니다(UTF-8 BOM, 칸마다 원문 근거 열 포함).
+- 측정: `node scripts/measure.js` → `out/facts.json`(정확도·처리 흐름·공식 통계). 같은 합성 요청 57건 처리 흐름: 손입력 6단계(칸 수로 센 값) vs 도구 평균 6단계 — 단계 수는 줄지 않고, 손입력의 오기·시간은 미측정. 미리 안 본 문서 첫 실행 기록은 `samples/FIRST-RUN.md`.
 - 테스트: `node --test` (단위) · `python3 test/e2e.py` (브라우저 실환경).
 - 구조: `src/domain`(순수) ← `src/application` ← `src/adapters` ← `src/infrastructure`. 스펙은 `SPEC.md`.

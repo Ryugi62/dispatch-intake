@@ -33,8 +33,8 @@ export function simulateTool(doc, extractor) {
       r.manual++;
     }
   }
-  confirmOrder(order); // 모두 승인돼야만 통과 — 예외가 나면 시뮬레이션 자체가 틀린 것
-  return { ...r, steps: r.approve + r.choose + r.manual + 1 };
+  const result = confirmOrder(order); // 모두 승인돼야만 통과 — 예외가 나면 시뮬레이션 자체가 틀린 것
+  return { ...r, steps: r.approve + r.choose + r.manual + 1, result };
 }
 
 export function measureFlow(docs, extractor) {

@@ -38,6 +38,7 @@ td.n{{font-weight:800;white-space:nowrap}}
 .mut{{color:#58616E}}
 .bt table{{font-size:30px}}
 .bt td{{padding:12px 16px}}
+.bt th{{white-space:nowrap}}
 .hl{{background:#E8F3FF;color:#1B64DA;font-weight:700;border-radius:12px}}
 .warn{{background:#FFF4E6;color:#9C4F00;font-weight:700;border-radius:12px}}
 .ok{{background:#E6FCF5;color:#087F5B;font-weight:700;border-radius:12px}}
@@ -55,8 +56,9 @@ ul.l li::before{{content:'';display:inline-block;width:14px;height:14px;backgrou
 .bar div{{display:flex;align-items:center;justify-content:center;white-space:nowrap}}
 """
 
-def page(body, chip="합성 문서 시연 · 현장 실증 없음", extra_chip=""):
-    return f"<!doctype html><html><head><meta charset='utf-8'><style>{CSS}</style></head><body><div class='chip'>{chip}</div>{extra_chip}<div class='wrap'>{body}</div></body></html>"
+def page(body, chip="", extra_chip=""):
+    chip_html = f"<div class='chip'>{chip}</div>" if chip else ""
+    return f"<!doctype html><html><head><meta charset='utf-8'><style>{CSS}</style></head><body>{chip_html}{extra_chip}<div class='wrap'>{body}</div></body></html>"
 
 def won(n): return f"{n:,}원"
 
@@ -75,7 +77,6 @@ _sh2 = sheet(_row2, _note2)
 CARDS['A2'] = page(f"<div class='eyebrow'>소형 운송사 사무실</div><h1>하차지 하나만 틀려도 차가 헛걸음을 합니다</h1><div class='row'><div class='card fill' style='flex:1'><div class='sub' style='margin:0 0 16px'>화주 카톡</div><div class='bubble'>{_k2}</div></div>{_sh2}</div>", extra_chip="<div class='chip stage' style='top:96px'>연출 · 지어낸 장면</div>")
 cost = P['error_cost_won']
 CARDS['A3'] = page(f"<div class='eyebrow'>오기 한 건의 값</div><h1>한 번 틀리면 운임 한 건이 날아간다고 보면</h1><div style='margin-top:30px'><span class='big' style='color:#1B64DA'>{won(cost)}</span> <span class='pill warn'>가정</span></div><div class='src'>가정: 오기 1건 = 1톤 용달 평균 견적 한 건 분량의 헛걸음(숨고 안내글 「용달견적 평균 11만원」). 현장에서 잰 값이 아닙니다.</div>")
-CARDS['A4'] = page("<div class='eyebrow'>먼저 밝힙니다</div><h1>이 영상은 합성 문서 시연입니다</h1><ul class='l'><li>요청 문서는 전부 직접 지어낸 합성 문서</li><li>실제 운송사·화주 문서가 아닙니다</li><li>현장 실증 0건 · 파일럿 운송사 없음</li></ul>")
 CARDS['A5'] = page("<div class='eyebrow'>우리가 하는 일</div><h1>칸마다 원문 자리를 붙이고, 승인한 칸만 배차표로</h1><div class='row'><div class='card' style='flex:1'><div class='sub' style='margin:0'>하차지</div><div class='mid' style='font-size:64px;margin-top:8px'>인천 <span class='pill ok'>승인함</span></div><div class='src' style='font-size:30px'>원문 <b style='color:#1B64DA'>「인천」</b> (20~22번째 글자)</div></div></div>")
 
 # ───────── B 유사 서비스 (③-b) ─────────
@@ -121,24 +122,41 @@ CARDS['D4'] = page(pipe(2, "<div class='row' style='margin-top:0'><div class='ca
 CARDS['D5'] = page(f"<div class='eyebrow'>가짜 추출기로 시험</div><h1>값을 지어내는 추출기는 전부 거절됩니다</h1><div style='margin-top:36px'><span class='big' style='color:#087F5B'>{F['liar']['rejected']} / {F['liar']['cells']}</span><span class='mid'> 칸 거절</span></div><div class='src'>합성 문서 {F['docs_total']}건에 값을 지어내거나 인용 위치를 어긋나게 내는 가짜 추출기를 돌린 결과 · 채워진 칸 0</div>")
 CARDS['D6'] = page("<div class='eyebrow'>한계를 먼저</div><h1>시연 추출기는 규칙 기반입니다</h1><ul class='l'><li>사진·손글씨 요청은 못 읽습니다 (글자로 복사되는 요청만)</li><li>언어모델 추출기는 이 레포에서 재지 않았습니다</li><li>바꿔 끼워도 같은 근거 검증을 통과해야 칸이 됩니다</li><li>실제 문서 일반화는 주장하지 않습니다</li></ul>")
 
-# ───────── E 측정 ─────────
-CARDS['E1'] = page(f"<div class='eyebrow'>측정</div><h1>합성 문서 {F['docs_total']}건 · 필수 {F['cells_total']}칸</h1><div class='card' style='margin-top:40px'><div class='sub' style='margin:0'>칸 정확도(지표 정의)</div><div class='mid' style='margin-top:12px;line-height:1.4'>정답과 같게 채운 칸 ÷ 전체 칸<br><span class='mut' style='font-size:32px;font-weight:700'>못 채운 칸·사람에게 넘긴 칸은 틀린 것으로 셉니다</span></div></div>")
-tot = fu['cells']
-def seg(n, color, label):
-    return f"<div style='width:{n/tot*100:.2f}%;background:{color}'>{label}</div>"
-CARDS['E2'] = page(f"<div class='eyebrow'>처음 보는 문서 {fu['docs']}건 · {fu['cells']}칸 · 고치기 전 첫 실행</div><h1>칸 정확도 <span style='color:#1B64DA'>{fu['accuracy_pct']}%</span></h1><div class='bar'>{seg(fu['correct'],'#1B64DA',str(fu['correct']))}{seg(fu['handoff'],'#9C4F00','')}{seg(fu['blank'],'#8B95A1','')}{seg(fu['wrong'],'#C62828','')}</div><div style='display:flex;gap:32px;margin-top:24px;font-size:30px;font-weight:700'><span style='color:#1B64DA'>정답 {fu['correct']}</span><span style='color:#9C4F00'>사람에게 넘김 {fu['handoff']}</span><span style='color:#58616E'>근거 없어 비움 {fu['blank']}</span><span style='color:#C62828'>조용한 오기 {fu['wrong']}</span></div>")
-CARDS['E3'] = page(f"<div class='eyebrow'>틀리는 대신 멈추는 칸</div><h1>넘김 {fu['handoff']}칸 · 비움 {fu['blank']}칸은 사람이 봅니다</h1><div class='row'><div class='card' style='flex:1'><span class='pill warn'>넘김</span><div class='src' style='font-size:32px'>원문이 서로 어긋나면(예: 인천 → 부천 변경) 후보를 모두 보여 줍니다</div></div><div class='card' style='flex:1'><span class='pill' style='background:#F2F4F6;color:#4E5968'>비움</span><div class='src' style='font-size:32px'>근거가 없으면(예: 「10시」만) 지어내지 않고 비웁니다</div></div></div>")
-CARDS['E4'] = page(f"<div class='eyebrow'>조용한 오기 = 충돌 표시 없이 틀리게 채운 칸</div><h1>{fu['wrong']}칸 → 안전장치 → 0칸</h1><div class='row'><div class='card' style='flex:1'><div class='src' style='font-size:30px;margin:0'>예: 「아침에 마산」 · 「부산 컨테이너」 · 「월요일」이 장소로 붙음 · 두 칸을 한 칸으로 삼킴</div></div><div class='card' style='flex:1'><div class='src' style='font-size:30px;margin:0'>장소에 시각·요일·톤수·상하차 낱말이 섞이면 장소가 아니라고 보고 비웁니다</div></div></div>")
-CARDS['E5'] = page(f"<div class='eyebrow'>읽는 법</div><h1>고친 문서에서 0칸이지, 새 문서 성능은 아닙니다</h1><ul class='l'><li>첫 실행 {fu['accuracy_pct']}%가 새 문서의 처음 성적</li><li>사람이 쓴 합성 문서 · 규칙 기반 추출기</li><li>실제 요청 문서로는 아직 재지 않았습니다</li></ul>")
+# ───────── E 측정 (숫자 3개: 85.9% · 4칸 · 0칸) ─────────
+CARDS['E1'] = page(f"<div class='eyebrow'>측정 두 가지</div><h1>칸 정확도와 조용한 오기</h1><div class='row'><div class='card' style='flex:1'><div class='sub' style='margin:0'>칸 정확도</div><div class='src' style='font-size:34px'>정답과 같게 채운 칸 ÷ 전체 칸<br>못 채운·넘긴 칸은 틀린 것으로 셈</div></div><div class='card' style='flex:1'><div class='sub' style='margin:0'>조용한 오기</div><div class='src' style='font-size:34px'>충돌 표시 없이 틀리게 채운 칸</div></div></div>")
+CARDS['E2'] = page(f"<div class='eyebrow'>처음 보는 합성 문서 · 고치기 전 첫 실행</div><div style='margin-top:28px'><span class='big' style='color:#1B64DA'>{fu['accuracy_pct']}%</span></div><div class='src' style='font-size:34px'>칸 정확도 · 나머지는 사람에게 넘기거나 비운 칸과 틀린 칸</div>")
+CARDS['E3'] = page(f"<div class='eyebrow'>조용한 오기</div><div style='margin-top:28px'><span class='big' style='color:#9C4F00'>{fu['wrong']}칸</span> <span class='big'>→</span> <span class='big' style='color:#087F5B'>0칸</span></div><div class='src' style='font-size:34px'>안전장치(장소에 시각·요일·톤수가 섞이면 비움)를 넣은 뒤 같은 문서 기준 · 새 문서 성능은 아님</div>")
 
-# ───────── F 도입·가격 ─────────
-CARDS['F1'] = page(f"<div class='eyebrow'>현장 적용 가능성 · 도입</div><h1>웹 브라우저 하나로 시작합니다</h1><div class='row'><div class='card' style='flex:1'><div class='sub' style='margin:0'>도입 비용</div><div class='mid' style='font-size:72px'>0원</div><div class='src'>설치·서버 없음 · 문서는 브라우저 안에서만 처리</div></div><div class='card' style='flex:1'><div class='sub' style='margin:0'>월 이용료</div><div class='mid' style='font-size:72px'>{won(P['month_won'])}</div><div class='src'>사무직원 1명 · 월 {P['monthly_orders_cap']}건까지(제안)</div></div></div>")
-CARDS['F2'] = page("<div class='eyebrow'>도입 기간(가정)</div><h1>1주면 시작할 수 있다고 잡았습니다</h1><div class='row'><div class='card' style='flex:2'><div class='sub' style='margin:0'>서식 맞추기</div><div class='mid' style='font-size:72px'>2일</div><div class='src'>그 운송사가 받는 카톡·메일·서식 모양에 맞춰 규칙 조정</div></div><div class='card' style='flex:3'><div class='sub' style='margin:0'>시범 사용</div><div class='mid' style='font-size:72px'>3일</div><div class='src'>사무직원이 승인하면서 쓰고, 고친 칸을 모아 다시 맞춤</div></div></div>")
-n = F['required_cells_per_order']
-CARDS['F3'] = page(f"<div class='eyebrow'>현장 인력 변화</div><h1>사무직원은 줄지 않습니다</h1><div class='row' style='align-items:center'><div class='card' style='flex:1;text-align:center'><div class='sub' style='margin:0'>지금</div><div class='mid' style='font-size:72px'>손입력 {n}칸</div></div><div class='arrow' style='font-size:72px'>→</div><div class='card' style='flex:1;text-align:center'><div class='sub' style='margin:0'>도입 후</div><div class='mid' style='font-size:72px;color:#1B64DA'>확인 {n}번</div></div></div><div class='src'>걸리는 시간(분)은 현장에서 재지 않아 적지 않습니다 · 인력 증감 0명</div>")
-CARDS['F4'] = page(f"<div class='eyebrow'>사업 모델</div><h1>사무직원 한 명당 월 구독</h1><div style='margin-top:32px'><span class='big' style='color:#1B64DA'>{won(P['month_won'])}</span> <span class='mid'>/ 월</span></div><div class='src' style='font-size:32px'>1석 · 월 {P['monthly_orders_cap']}건까지 · 도입비 0원 · 제안 가격(가정)</div>")
-CARDS['F5'] = page(f"<div class='eyebrow'>본전 계산</div><h1>한 달에 한 건만 막아도 본전</h1><div class='card' style='margin-top:36px'><div class='mid' style='font-size:60px;line-height:1.5'>{won(P['month_won'])} ÷ {won(P['error_cost_won'])} = <span style='color:#1B64DA'>{P['breakeven_errors_per_month']}건</span> / 월</div><div class='src'>월 이용료 ÷ 오기 1건 손실(가정) = 본전이 되는 월 오기 방지 건수</div></div>")
-CARDS['F6'] = page("<div class='eyebrow'>이 숫자들의 출처</div><h1>가정이고, 현장에서 잰 값이 아닙니다</h1><table style='margin-top:24px'><tr><th>숫자</th><th>근거</th></tr><tr><td class='n'>오기 1건 11만 원</td><td>숨고 안내글 「용달견적 평균 11만원」 — 소비자 견적, 가정으로만 사용</td></tr><tr><td class='n'>월 이용료·1주</td><td>우리 제안(가정) — 현장 협의 전</td></tr><tr><td class='n'>화물차 371만 7천 대</td><td>국토교통부 자동차등록현황 2024년 말 — 시장 배경, 우리 고객 수 아님</td></tr></table>")
+# ───────── F 도입·흐름·가격 ─────────
+FL = F['flow']
+CARDS['F1'] = page("<div class='eyebrow'>현장 적용 가능성 · 도입</div><h1>웹 브라우저 하나로 시작합니다</h1><div class='row'><div class='card' style='flex:1'><div class='sub' style='margin:0'>도입 비용</div><div class='mid' style='font-size:84px'>0원</div><div class='src'>설치·서버 없음 · 문서는 브라우저 안에서만 처리</div></div></div>")
+CARDS['F2'] = page("<div class='eyebrow'>도입 기간(가정)</div><h1>1주면 시작할 수 있다고 잡았습니다</h1><div class='row'><div class='card' style='flex:1'><div class='sub' style='margin:0'>서식 맞추기 → 시범 사용</div><div class='mid' style='font-size:72px'>1주</div><div class='src'>그 운송사가 받는 카톡·메일·서식에 맞춰 규칙을 조정하고, 사무직원이 승인하며 쓰면서 고친 칸을 모읍니다</div></div></div>")
+def flow_tbl(hl=False):
+    wr = "class='hl'" if hl else ""
+    return f"<table style='margin-top:12px'><tr><th>한 건 처리</th><th>손입력</th><th>도구(합성 요청 {FL['docs']}건 실측)</th></tr><tr><td class='n'>단계 수</td><td>{FL['manual_steps']}단계 (5칸 입력 + 저장)</td><td>평균 {FL['tool_steps_mean']:g}단계 (승인·고르기·직접 입력·올리기)</td></tr><tr><td class='n'>오기</td><td class='mut'>{FL['manual_error']}</td><td {wr}>{FL['blind_wrong_cells']}건 (맹목 승인 기준)</td></tr><tr><td class='n'>걸리는 시간</td><td class='mut'>{FL['manual_time']}</td><td class='mut'>{FL['manual_time']}</td></tr></table>"
+CARDS['F3'] = page(f"<div class='eyebrow'>같은 요청 {FL['docs']}건으로 재 보니</div><h1>단계 수는 줄지 않습니다</h1>{flow_tbl()}<div class='src' style='font-size:26px'>손입력 기준은 칸 수로 센 값 · 도구는 승인한 칸·고른 칸·직접 넣은 칸·올리기를 센 값 · 시간은 사람이 해 보지 않아 재지 않음</div>")
+CARDS['F4'] = page(f"<div class='eyebrow'>대신 달라지는 것</div><h1>틀린 칸이 조용히 넘어가지 않습니다</h1>{flow_tbl(True)}<div class='src' style='font-size:26px'>맹목 승인 = 인용을 보지 않고 전부 누른 최악의 경우 · 손입력 오기는 사람이 해 보지 않아 미측정</div>")
+CARDS['F5'] = page(f"<div class='eyebrow'>사업 모델</div><h1>사무직원 한 명당 월 구독</h1><div style='margin-top:32px'><span class='big' style='color:#1B64DA'>{won(P['month_won'])}</span> <span class='mid'>/ 월</span></div><div class='src' style='font-size:32px'>1석 · 월 {P['monthly_orders_cap']}건까지 · 도입비 0원 · 제안 가격(가정)</div>")
+CARDS['F6'] = page(f"<div class='eyebrow'>본전 계산</div><h1>한 달에 한 건만 막아도 본전</h1><div class='card' style='margin-top:36px'><div class='mid' style='font-size:60px;line-height:1.5'>{won(P['month_won'])} ÷ {won(P['error_cost_won'])} = <span style='color:#1B64DA'>{P['breakeven_errors_per_month']}건</span> / 월</div><div class='src'>월 이용료 ÷ 오기 1건 손실(가정) = 본전이 되는 월 오기 방지 건수</div></div>")
+CARDS['F7'] = page("<div class='eyebrow'>이 숫자들의 출처</div><h1>가정이고, 현장에서 잰 값이 아닙니다</h1><table style='margin-top:24px'><tr><th>숫자</th><th>근거</th></tr><tr><td class='n'>오기 1건 11만 원</td><td>숨고 안내글 「1톤 트럭 기준 10~50km 구간의 평균은 약 11만 원 수준」 — 소비자 견적, 가정으로만 사용</td></tr><tr><td class='n'>월 이용료·1주</td><td>우리 제안(가정) — 현장 협의 전</td></tr></table>")
+
+# ───────── H 시장·사업화 한 장 (진행 공개) ─────────
+MK = F['market']
+def hpage(stage):
+    firms = f"{MK['freight_firms']:,}"
+    workers = f"{MK['freight_workers']:,}"
+    top = f"<div class='eyebrow'>누구에게 파나 · 사업화</div><h1>작은 운송사가 많은 시장입니다</h1><div class='row' style='margin-top:20px'><div class='card' style='flex:1'><div class='sub' style='margin:0'>화물운송업 기업체 · {MK['year']}년</div><div class='mid' style='font-size:84px;color:#1B64DA'>{firms}개</div><div class='src' style='font-size:26px;margin-top:8px'>종사자 {workers}명 ÷ 기업체 = <b>한 곳에 평균 {MK['workers_per_firm']}명</b>(우리가 계산)</div></div></div><div class='src' style='font-size:24px;margin-top:10px'>출처: 운수업조사 결과(잠정) 보도자료 2025-12-11 · 「기업체수 41만 4천개, 종사자수 79만 2천명」 · mods.go.kr/boardDownload.es?bid=238&amp;list_no=442368&amp;seq=1 · 화물운송업 전체이며 우리 고객 수가 아님</div>"
+    mid = "<div class='row' style='margin-top:20px'><div class='card' style='flex:1'><div class='sub' style='margin:0'>해외 서비스(공개 자료 기준)</div><div class='src' style='font-size:30px;margin-top:6px'>이메일 · 문서 파일 · 엑셀 입력<br><span class='warn pill'>카톡 요청: 공개 자료에서 못 찾음</span></div></div><div class='card' style='flex:1;border-color:#1B64DA'><div class='sub' style='margin:0'>우리</div><div class='src' style='font-size:30px;margin-top:6px'>카톡 · 메일 · 의뢰서 글자 입력<br><span class='ok pill'>국내 소형 운송사의 카톡 접수</span></div></div></div>"
+    bot = "<div class='card' style='margin-top:20px'><div class='mid' style='font-size:44px'>카톡 접수 → 칸마다 승인 → <span style='color:#1B64DA'>엑셀 배차표(CSV)</span></div></div>"
+    body = top
+    if stage >= 2: body = top.replace("<div class='row' style='margin-top:20px'>", "<div class='row' style='margin-top:12px'>", 1) + ""
+    if stage >= 3: body += mid
+    if stage >= 4: body = top + mid.replace("margin-top:20px", "margin-top:12px") + bot
+    return page(body)
+CARDS['H1'] = hpage(1)
+CARDS['H2'] = page(f"<div class='eyebrow'>누구에게 파나 · 사업화</div><h1>평균이 두 명이 안 되는 시장</h1><div class='row' style='margin-top:30px'><div class='card' style='flex:1'><div class='sub' style='margin:0'>종사자 {MK['freight_workers']:,}명</div><div class='src' style='font-size:34px'>÷ 기업체 {MK['freight_firms']:,}개</div></div><div class='arrow' style='font-size:64px'>=</div><div class='card' style='flex:1;border-color:#1B64DA'><div class='sub' style='margin:0'>한 곳에 평균</div><div class='mid' style='font-size:96px;color:#1B64DA'>{MK['workers_per_firm']}명</div></div></div><div class='src' style='font-size:28px'>아주 작은 곳이 많다는 뜻(우리가 계산한 평균 · 우리 고객 수 아님)</div>")
+CARDS['H3'] = hpage(3)
+CARDS['H4'] = hpage(4)
 
 # ───────── G 일정·자원·목표 ─────────
 def gtable(n):
@@ -152,7 +170,15 @@ CARDS['G1'] = page(gtable(1))
 CARDS['G2'] = page(gtable(2))
 CARDS['G3'] = page(gtable(3))
 CARDS['G4'] = page(gtable(4))
-CARDS['G5'] = page("<div style='position:absolute;left:0;right:0;top:120px;text-align:center'><div class='eyebrow'>지금</div><h1 style='font-size:80px'>합성 문서 시연까지</h1><div class='sub' style='font-size:44px;margin-top:28px'>다음 첫 숫자 = 현장 실증 (실제 요청 100건)</div><div class='src' style='margin-top:40px'>추출기 규칙 기반 · 합성 문서 57건 · 파일럿 운송사 없음</div><div class='src' style='font-size:36px;color:#1B64DA;font-weight:700'>직접 열어 보기 · ryugi62.github.io/dispatch-intake</div></div>")
+CARDS['G5'] = page(chip="합성 문서 시연 · 현장 실증 없음", body="<div style='position:absolute;left:0;right:0;top:120px;text-align:center'><div class='eyebrow'>지금</div><h1 style='font-size:80px'>합성 문서 시연까지</h1><div class='sub' style='font-size:44px;margin-top:28px'>다음 첫 숫자 = 현장 실증 (실제 요청 100건)</div><div class='src' style='margin-top:40px'>추출기 규칙 기반 · 합성 문서 57건 · 파일럿 운송사 없음</div><div class='src' style='font-size:36px;color:#1B64DA;font-weight:700'>직접 열어 보기 · ryugi62.github.io/dispatch-intake</div></div>")
+
+import csv as _csv
+def csv_card():
+    rows = list(_csv.reader(open(os.path.join(ROOT, 'out', 'sample-export.csv'), encoding='utf-8-sig')))
+    head = ''.join(f'<th>{esc(c)}</th>' for c in rows[0])
+    body = ''.join('<tr>' + ''.join(f'<td>{esc(c)}</td>' for c in r) + '</tr>' for r in rows[1:])
+    return page(f"<div class='eyebrow'>내려받은 배차표.csv</div><h1>칸마다 원문 근거가 같이 들어 있습니다</h1><div class='bt' style='margin-top:20px'><table style='font-size:26px'><tr>{head}</tr>{body}</table></div><div class='src' style='font-size:24px'>합성 요청 3건을 도구로 처리해 실제로 만든 파일(out/sample-export.csv) · UTF-8 BOM, 엑셀에서 바로 열림</div>")
+CARDS['C15'] = csv_card()
 
 def render_cards():
     import re as _re
@@ -240,14 +266,6 @@ def render_app():
             if cursor_on:
                 canvas_d = canvas
                 _mark_cursor(canvas_d, [bbox(x) for x in cursor_on], r, off, origin)
-            if zoom:
-                from PIL import ImageFont
-                d2 = ImageDraw.Draw(canvas)
-                fnt = ImageFont.truetype(os.path.join(FONT_DIR, 'Pretendard-Bold.otf'), 26)
-                txt = '합성 문서 시연 · 현장 실증 없음'
-                w = d2.textlength(txt, font=fnt)
-                d2.rounded_rectangle([1920 - 48 - w - 40, 28, 1920 - 48, 28 + 48], radius=20, fill=(255, 244, 230))
-                d2.text((1920 - 48 - w - 20, 36), txt, font=fnt, fill=(156, 79, 0))
             canvas.save(os.path.join(OUT, f'{name}.png'))
         cell = lambda f: f'[data-testid=cell-{f}]'
         snap('C1')
@@ -263,11 +281,19 @@ def render_app():
         snap('C8')
         pg.hover(cell('dropoff')); snap('C9', spot=[cell('dropoff'), '.doc'], cursor_on=[cell('dropoff')])
         pg.click('[data-testid=choose-dropoff-1]'); snap('C10', spot=[cell('dropoff')], cursor_on=[cell('dropoff')])
+        for f in ['pickup', 'pickupDate', 'pickupTime', 'tonnage']:
+            pg.click(f'[data-testid=approve-{f}]')
+        pg.click('[data-testid=confirm]'); pg.mouse.move(5, 5)
         pg.select_option('[data-testid=sample]', index=4); pg.mouse.move(5, 5)
         snap('C11')
         pg.hover(cell('pickupTime')); snap('C12', spot=[cell('pickupTime')], cursor_on=[cell('pickupTime')])
         pg.fill('[data-testid=in-pickupTime]', '10:00'); snap('C13a', spot=[cell('pickupTime')], cursor_on=['[data-testid=in-pickupTime]'])
         pg.click('[data-testid=manual-pickupTime]'); snap('C13', spot=[cell('pickupTime')], cursor_on=[cell('pickupTime')])
+        pg.fill('[data-testid=in-tonnage]', '1'); pg.click('[data-testid=manual-tonnage]')
+        for f in ['pickup', 'dropoff', 'pickupDate']:
+            pg.click(f'[data-testid=approve-{f}]')
+        pg.click('[data-testid=confirm]'); pg.mouse.move(5, 5)
+        snap('C14', zoom='right', spot=['[data-testid=export]'], cursor_on=['[data-testid=export]'])
         print('page errors', errs)
         b.close()
 
