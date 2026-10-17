@@ -1,0 +1,102 @@
+{
+ "checks": [
+  {
+   "name": "영상 자막",
+   "in": "subs",
+   "token": "85.9",
+   "ok": true
+  },
+  {
+   "name": "영상 자막",
+   "in": "subs",
+   "token": "37건",
+   "ok": true
+  },
+  {
+   "name": "영상 자막",
+   "in": "subs",
+   "token": "228칸",
+   "ok": true
+  },
+  {
+   "name": "영상 자막",
+   "in": "subs",
+   "token": "57건",
+   "ok": true
+  },
+  {
+   "name": "영상 자막",
+   "in": "subs",
+   "token": "4칸",
+   "ok": true
+  },
+  {
+   "name": "영상 자막",
+   "in": "subs",
+   "token": "14칸",
+   "ok": true
+  },
+  {
+   "name": "영상 자막",
+   "in": "subs",
+   "token": "8칸",
+   "ok": true
+  },
+  {
+   "name": "가격",
+   "in": "subs",
+   "token": "59,000원",
+   "ok": true
+  },
+  {
+   "name": "본전 건수",
+   "in": "screen",
+   "token": "0.54건",
+   "ok": true
+  },
+  {
+   "name": "가짜 추출기 화면",
+   "in": "screen",
+   "token": "228 / 228",
+   "ok": true
+  },
+  {
+   "name": "매니페스트 주장",
+   "in": "deliverable.json",
+   "token": "85.9",
+   "ok": true
+  },
+  {
+   "name": "매니페스트 주장",
+   "in": "deliverable.json",
+   "token": "228",
+   "ok": true
+  },
+  {
+   "name": "매니페스트 주장",
+   "in": "deliverable.json",
+   "token": "59,000",
+   "ok": true
+  },
+  {
+   "name": "매니페스트 주장",
+   "in": "deliverable.json",
+   "token": "0.54",
+   "ok": true
+  },
+  {
+   "name": "매니페스트 주장",
+   "in": "deliverable.json",
+   "token": "37건",
+   "ok": true
+  },
+  {
+   "name": "평가 파일 합성 표기",
+   "in": "평가.md",
+   "token": "독립 채점이 아니다",
+   "ok": true
+  }
+ ],
+ "forbidden": [],
+ "pass": true
+}
