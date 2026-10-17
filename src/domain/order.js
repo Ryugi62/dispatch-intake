@@ -73,6 +73,6 @@ export function confirmOrder(order) {
     tonnage: f.tonnage.value,
     cargo: f.cargo.status === 'approved' ? f.cargo.value : null,
   };
-  const citations = Object.fromEntries(Object.values(f).map((x) => [x.id, x.evidence ? x.evidence.quote : x.manual ? '(사람 직접 입력)' : null]));
+  const citations = Object.fromEntries(Object.values(f).map((x) => [x.id, x.status !== 'approved' ? null : x.evidence ? x.evidence.quote : '(사람 직접 입력)']));
   return { row, citations, log: order.log };
 }

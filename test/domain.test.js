@@ -101,3 +101,13 @@ test('요일 낱말은 장소가 아니다(H3 m08 조용한 오기 회귀)', () 
   assert.equal(o.fields.pickup.value, '마산');
   assert.equal(o.fields.pickupDate.status, 'empty'); // 요일만으로는 날짜를 확정하지 않는다
 });
+
+test('승인하지 않은 선택 칸(품목)은 배차표 행에도 근거 장부에도 없다', () => {
+  let o = intake(doc('내일 오전 9시 마산 상차, 인천 하차 1톤 팔레트 8개'), ruleExtract);
+  for (const id of ['pickup', 'dropoff', 'pickupDate', 'pickupTime', 'tonnage']) o = approveField(o, id);
+  const out = confirmOrder(o);
+  assert.equal(out.row.cargo, null);
+  assert.equal(out.citations.cargo, null);
+  o = approveField(o, 'cargo');
+  assert.equal(confirmOrder(o).row.cargo, '팔레트 8개');
+});

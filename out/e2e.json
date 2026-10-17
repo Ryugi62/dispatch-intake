@@ -1,0 +1,15 @@
+{
+ "confirm_disabled_at_start": true,
+ "confirm_disabled_after_4": true,
+ "confirm_enabled_after_5": true,
+ "result_text": "배차표에 올렸어요\n상차지\t마산\t원문 「마산」\n하차지\t인천\t원문 「인천」\n상차 일시\t2026-10-20 09:00\t원문 「내일 + 오전 9시」\n톤수\t1톤\t원문 「1톤」\n품목\t-\t원문 「-」",
+ "conflict_status": "conflict",
+ "conflict_after_choose": "approved",
+ "empty_status": "empty",
+ "manual_text": "상차 시각\n10:00 승인함\n출처 사람이 직접 입력 — 원문 근거 없음",
+ "own_pickup": "상차지\n양산 승인 대기\n원문 「양산」 (9~11번째 글자)\n승인",
+ "own_tonnage": "톤수\n2.5톤 승인 대기\n원문 「2.5톤」 (21~25번째 글자)\n승인",
+ "no_hscroll_390": true,
+ "console_errors": [],
+ "pass": true
+}
