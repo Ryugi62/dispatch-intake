@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>운송 의뢰 접수 AI 시연</title>
+<link rel="stylesheet" href="src/infrastructure/web/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">운송 의뢰 접수</div>
+  <div class="notice" data-testid="notice">합성 문서 시연입니다. 실제 운송사·화주 문서가 아니며, 추출기는 규칙 기반 시연용입니다.</div>
+</header>
+<main class="wrap">
+  <section class="pane left" aria-label="받은 요청">
+    <div class="pane-head">
+      <h2>받은 요청</h2>
+      <div class="tools">
+        <select id="sample" aria-label="샘플 요청 고르기" data-testid="sample"></select>
+      </div>
+    </div>
+    <div class="meta" id="meta"></div>
+    <div id="doc" class="doc" data-testid="doc"></div>
+    <details class="own" id="own">
+      <summary>내 요청 붙여넣기</summary>
+      <textarea id="ownText" aria-label="받은 요청 붙여넣기" rows="4" placeholder="예) 내일 오전 9시 마산 상차, 인천 하차 1톤" data-testid="own-text"></textarea>
+      <div class="row"><label>받은 날 <input id="ownDate" type="date" value="2026-10-19"></label><button id="ownGo" class="ghost" data-testid="own-go">칸 채우기</button></div>
+    </details>
+  </section>
+  <section class="pane right" aria-label="배차표">
+    <div class="pane-head"><h2>배차표 한 줄</h2><div class="hint" id="progress" data-testid="progress"></div></div>
+    <div id="cells" class="cells"></div>
+    <button id="confirm" class="primary" disabled data-testid="confirm">배차표에 올리기</button>
+    <div id="result" class="result" hidden data-testid="result"></div>
+  </section>
+</main>
+<script type="module" src="src/infrastructure/web/app.js"></script>
+</body>
+</html>

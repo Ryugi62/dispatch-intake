@@ -1,0 +1,38 @@
+{
+  "generated_by": "scripts/measure.js",
+  "docs_total": 57,
+  "docs_dev": 20,
+  "cells_total": 285,
+  "current": {
+    "correct": 265,
+    "handoff": 14,
+    "blank": 6,
+    "wrong": 0,
+    "accuracy_pct": 93,
+    "quotes_checked": 241,
+    "quotes_ok": 241
+  },
+  "first_run_unseen": {
+    "docs": 37,
+    "cells": 185,
+    "correct": 159,
+    "handoff": 14,
+    "blank": 8,
+    "wrong": 4,
+    "accuracy_pct": 85.9,
+    "handoff_pct": 7.6,
+    "wrong_pct": 2.2
+  },
+  "liar": {
+    "cells": 228,
+    "rejected": 228
+  },
+  "price": {
+    "month_won": 59000,
+    "per_seat": 1,
+    "monthly_orders_cap": 300,
+    "error_cost_won": 110000,
+    "breakeven_errors_per_month": 0.54
+  },
+  "required_cells_per_order": 5
+}

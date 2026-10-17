@@ -1,0 +1,8 @@
+{
+  "note": "미리 안 본 문서 세트의 고치기 전 첫 실행 기록(samples/FIRST-RUN.md와 같은 값). H1 커밋 27f930f · H2 eae698e · H3 4af8ac4 직전 코드 기준.",
+  "sets": [
+    {"id": "H1", "docs": 15, "cells": 75, "correct": 60, "handoff": 9, "blank": 5, "wrong": 1},
+    {"id": "H2", "docs": 12, "cells": 60, "correct": 51, "handoff": 4, "blank": 3, "wrong": 2},
+    {"id": "H3", "docs": 10, "cells": 50, "correct": 48, "handoff": 1, "blank": 0, "wrong": 1}
+  ]
+}
