@@ -67,7 +67,7 @@ KAKAO = "사장님 내일 오전 9시 마산 상차, 인천 하차 1톤 가능�
 def sheet(rows, note=""):
     tr = ''.join(f"<tr>{''.join(c for c in r)}</tr>" for r in rows)
     return f"<div class='card' style='flex:1'><div class='sub' style='margin:0 0 8px'>배차표(엑셀)에 손으로 입력</div><table><tr><th>상차지</th><th>하차지</th><th>일시</th><th>톤수</th></tr>{tr}</table>{note}</div>"
-CARDS['A1'] = page(f"<div class='eyebrow'>소형 운송사 사무실</div><h1>카톡 요청을 배차표에 손으로 옮겨 적습니다</h1><div class='row'><div class='card fill' style='flex:1'><div class='sub' style='margin:0 0 16px'>화주 카톡</div><div class='bubble'>{esc(KAKAO)}</div></div>{sheet([['<td class=mut>&nbsp;</td>']*4])}</div>", extra_chip="<div class='chip stage' style='top:96px'>연출 · 지어낸 장면</div>")
+CARDS['A1'] = page(f"<div class='eyebrow'>소형 운송사 사무실</div><h1>카톡 요청을 배차표에 손으로 옮겨 적습니다</h1><div class='row'><div class='card fill' style='flex:1'><div class='sub' style='margin:0 0 16px'>화주 카톡</div><div class='bubble'>{esc(KAKAO)}</div></div>{sheet([['<td class=mut>&nbsp;</td>']*4])}</div><div class='src' style='font-size:26px;margin-top:24px'>근거: 화물 주선사 채용공고(더팀스 · 동부전국화물, 8명 규모) 「화주로부터 전화 및 메세지를 통해 오더 접수 → 오더 입력 → 배차 진행」 · 2026-10-18 열람</div>", extra_chip="<div class='chip stage' style='top:96px'>연출 · 지어낸 장면</div>")
 _k2 = esc(KAKAO).replace('인천', "<span class='hl'>인천</span>")
 _note2 = "<div class='mid' style='color:#9C4F00;margin-top:24px'>카톡엔 인천, 배차표엔 부천</div>"
 _row2 = [["<td>마산</td>", "<td class='warn'>부천</td>", "<td>10/20 09:00</td>", "<td>1톤</td>"]]
@@ -86,14 +86,15 @@ ROWS = [
  ("로지스팟", "한국 · 화주·차주 배차", "화주 배차 요청 → 차주 배차", "해당 없음", "의뢰 문서 읽기 확인 못 함"),
  ("원콜", "한국 · 차주용 오더 앱", "오더 목록 · 자동 배차", "해당 없음", "의뢰 문서 읽기 확인 못 함"),
 ]
-def tbl(n_rows, hl_cell=None, hl_col=None, show_us=False):
+def tbl(n_rows, hl_cell=None, hl_col=None, show_us=False, dim=False):
     head = "<tr><th>서비스</th><th>하는 일</th><th>사람 승인</th><th>칸별 원문 위치 인용</th></tr>"
     trs = ""
     for i, r in enumerate(ROWS):
         vis = '' if i < n_rows else 'hide'
         c3 = f"<td class='{'hl' if hl_cell == i else ''}'>{r[3]}</td>"
         c4 = f"<td class='{'warn' if hl_col == 4 else 'mut'}'>{r[4]}</td>"
-        trs += f"<tr class='{vis}'><td class='n'>{r[0]}<div class='mut' style='font-size:26px;font-weight:400'>{r[1]}</div></td><td>{r[2]}</td>{c3}{c4}</tr>"
+        dimc = ' style="opacity:.28"' if (dim and hl_cell is not None and i != hl_cell) else ''
+        trs += f"<tr class='{vis}'{dimc}><td class='n'>{r[0]}<div class='mut' style='font-size:26px;font-weight:400'>{r[1]}</div></td><td>{r[2]}</td>{c3}{c4}</tr>"
     us = "<tr class='%s'><td class='n' style='color:#1B64DA'>우리<div class='mut' style='font-size:26px;font-weight:400'>합성 문서 시연</div></td><td>카톡·메일·의뢰서 → 배차표 칸 채움</td><td>칸마다 승인</td><td class='ok'>칸마다 원문 글자 위치 + 검증 통과한 값만</td></tr>" % ('' if show_us else 'hide')
     return f"<table>{head}{trs}{us}</table>"
 def bpage(**kw):
@@ -101,7 +102,7 @@ def bpage(**kw):
 CARDS['B1'] = bpage(n_rows=0)
 CARDS['B2'] = bpage(n_rows=2)
 CARDS['B3'] = bpage(n_rows=4)
-CARDS['B4'] = bpage(n_rows=4, hl_cell=0)
+CARDS['B4'] = bpage(n_rows=4, hl_cell=0, dim=True)
 CARDS['B5'] = bpage(n_rows=4, hl_cell=0, hl_col=4)
 CARDS['B6'] = bpage(n_rows=4, hl_col=4, show_us=True)
 
@@ -118,7 +119,7 @@ CARDS['D2'] = page(pipe(0, "<div class='card fill'><div class='src' style='margi
 CARDS['D3'] = page(pipe(1, "<div class='card fill'><ul class='l' style='font-size:32px;margin:0'><li>위치가 원문 안에 있다</li><li>그 위치의 글자가 인용과 같다</li><li>인용에서 값을 다시 계산하면 추출기가 낸 값과 같다</li></ul></div>"))
 CARDS['D4'] = page(pipe(2, "<div class='row' style='margin-top:0'><div class='card' style='flex:1'><span class='pill ok'>통과</span><div class='src' style='font-size:32px'>인용 「인천」 → 값 인천 = 낸 값 인천 → 칸에 채움</div></div><div class='card' style='flex:1'><span class='pill warn'>거절</span><div class='src' style='font-size:32px'>인용 「부산」인데 원문 그 자리는 「마산」 → 칸은 빈 채로 사람에게</div></div></div>"))
 CARDS['D5'] = page(f"<div class='eyebrow'>가짜 추출기로 시험</div><h1>값을 지어내는 추출기는 전부 거절됩니다</h1><div style='margin-top:36px'><span class='big' style='color:#087F5B'>{F['liar']['rejected']} / {F['liar']['cells']}</span><span class='mid'> 칸 거절</span></div><div class='src'>합성 문서 {F['docs_total']}건에 값을 지어내거나 인용 위치를 어긋나게 내는 가짜 추출기를 돌린 결과 · 채워진 칸 0</div>")
-CARDS['D6'] = page("<div class='eyebrow'>한계를 먼저</div><h1>시연 추출기는 규칙 기반입니다</h1><ul class='l'><li>언어모델 추출기는 이 레포에서 재지 않았습니다</li><li>바꿔 끼워도 같은 근거 검증을 통과해야 칸이 됩니다</li><li>실제 문서 일반화는 주장하지 않습니다</li></ul>")
+CARDS['D6'] = page("<div class='eyebrow'>한계를 먼저</div><h1>시연 추출기는 규칙 기반입니다</h1><ul class='l'><li>사진·손글씨 요청은 못 읽습니다 (글자로 복사되는 요청만)</li><li>언어모델 추출기는 이 레포에서 재지 않았습니다</li><li>바꿔 끼워도 같은 근거 검증을 통과해야 칸이 됩니다</li><li>실제 문서 일반화는 주장하지 않습니다</li></ul>")
 
 # ───────── E 측정 ─────────
 CARDS['E1'] = page(f"<div class='eyebrow'>측정</div><h1>합성 문서 {F['docs_total']}건 · 필수 {F['cells_total']}칸</h1><div class='card' style='margin-top:40px'><div class='sub' style='margin:0'>칸 정확도(지표 정의)</div><div class='mid' style='margin-top:12px;line-height:1.4'>정답과 같게 채운 칸 ÷ 전체 칸<br><span class='mut' style='font-size:32px;font-weight:700'>못 채운 칸·사람에게 넘긴 칸은 틀린 것으로 셉니다</span></div></div>")
@@ -154,6 +155,13 @@ CARDS['G4'] = page(gtable(4))
 CARDS['G5'] = page("<div style='position:absolute;left:0;right:0;top:120px;text-align:center'><div class='eyebrow'>지금</div><h1 style='font-size:80px'>합성 문서 시연까지</h1><div class='sub' style='font-size:44px;margin-top:28px'>다음 첫 숫자 = 현장 실증 (실제 요청 100건)</div><div class='src' style='margin-top:40px'>추출기 규칙 기반 · 합성 문서 57건 · 파일럿 운송사 없음</div></div>")
 
 def render_cards():
+    import re as _re
+    texts = []
+    for k, h in CARDS.items():
+        t = _re.sub(r'<style>.*?</style>', '', h, flags=_re.S)
+        texts.append(_re.sub(r'\s+', ' ', html.unescape(_re.sub(r'<[^>]+>', ' ', t))).strip())
+    os.makedirs(os.path.join(HERE, '_cache'), exist_ok=True)
+    json.dump(texts, open(os.path.join(HERE, '_cache', 'screen_text.json'), 'w', encoding='utf-8'), ensure_ascii=False)
     with sync_playwright() as p:
         b = p.chromium.launch()
         pg = b.new_page(viewport={'width': 1920, 'height': 1080})
@@ -167,55 +175,99 @@ def render_cards():
         b.close()
 
 # ───────── C 실제 시연 화면 ─────────
-def cursor(img_path, box):
-    im = Image.open(img_path).convert('RGBA')
-    ov = Image.new('RGBA', im.size, (0, 0, 0, 0))
-    d = ImageDraw.Draw(ov)
-    cx, cy = (box['x'] + box['width'] * 0.5) * 1.5, (box['y'] + box['height'] * 0.5) * 1.5
-    d.ellipse([cx - 22, cy - 22, cx + 22, cy + 22], fill=(27, 100, 218, 70), outline=(27, 100, 218, 255), width=5)
-    im = Image.alpha_composite(im, ov).convert('RGB')
-    im.save(img_path)
+DSF = 3
+def _img(tmp):
+    return Image.open(tmp).convert('RGB')
 
-def canvas(shot, dst):
-    im = Image.open(shot).convert('RGB')
+def _fit(im, box=None):
+    """box=(x,y,w,h) css px 영역을 1920x864 안에 맞춰 키운다(레터박스). None이면 전체."""
+    if box:
+        x, y, w, h = [v * DSF for v in box]
+        x0, y0 = max(0, int(x)), max(0, int(y))
+        im = im.crop((x0, y0, min(im.width, int(x + w)), min(im.height, int(y + h))))
+    r = min(1920 / im.width, 864 / im.height)
+    im = im.resize((int(im.width * r), int(im.height * r)), Image.LANCZOS)
     bg = Image.new('RGB', (1920, 1080), (244, 245, 247))
-    bg.paste(im, (0, 0))
-    bg.save(dst)
+    bg.paste(im, ((1920 - im.width) // 2, 0 if not box else (864 - im.height) // 2))
+    return bg, r, ((1920 - im.width) // 2, 0 if not box else (864 - im.height) // 2)
+
+def _mark_cursor(canvas, boxes_css, r, off, origin):
+    d = ImageDraw.Draw(canvas, 'RGBA')
+    for bb in boxes_css:
+        cx = off[0] + (bb['x'] - origin[0] + bb['width'] * 0.5) * DSF * r
+        cy = off[1] + (bb['y'] - origin[1] + bb['height'] * 0.5) * DSF * r
+        d.ellipse([cx - 24, cy - 24, cx + 24, cy + 24], fill=(27, 100, 218, 70), outline=(27, 100, 218, 255), width=5)
+
+def _spot(canvas, boxes_css, r, off, origin, pad=10):
+    ov = Image.new('RGBA', canvas.size, (10, 16, 28, 120))
+    hole = ImageDraw.Draw(ov)
+    for bb in boxes_css:
+        x0 = off[0] + (bb['x'] - origin[0]) * DSF * r - pad
+        y0 = off[1] + (bb['y'] - origin[1]) * DSF * r - pad
+        x1 = x0 + bb['width'] * DSF * r + 2 * pad
+        y1 = y0 + bb['height'] * DSF * r + 2 * pad
+        hole.rounded_rectangle([x0, y0, x1, y1], radius=20, fill=(0, 0, 0, 0))
+    out = Image.alpha_composite(canvas.convert('RGBA'), ov)
+    # 구멍 영역은 원본으로 복원
+    mask = Image.new('L', canvas.size, 0)
+    md = ImageDraw.Draw(mask)
+    for bb in boxes_css:
+        x0 = off[0] + (bb['x'] - origin[0]) * DSF * r - pad
+        y0 = off[1] + (bb['y'] - origin[1]) * DSF * r - pad
+        md.rounded_rectangle([x0, y0, x0 + bb['width'] * DSF * r + 2 * pad, y0 + bb['height'] * DSF * r + 2 * pad], radius=20, fill=255)
+    return Image.composite(canvas.convert('RGBA'), out, mask).convert('RGB')
 
 def render_app():
     with serve() as base, sync_playwright() as p:
         b = p.chromium.launch()
-        pg = b.new_page(viewport={'width': 1280, 'height': 576}, device_scale_factor=1.5)
+        pg = b.new_page(viewport={'width': 1280, 'height': 576}, device_scale_factor=DSF)
         errs = []
         pg.on('pageerror', lambda e: errs.append(str(e)))
         pg.goto(base + '/?compact=1'); pg.wait_for_selector('[data-testid=cell-pickup]')
-        def snap(name, target=None):
+        def bbox(sel):
+            return pg.locator(sel).first.bounding_box()
+        def snap(name, mode='full', cursor_on=None, spot=None, zoom=None):
             tmp = os.path.join(OUT, f'_{name}.png')
             pg.screenshot(path=tmp)
-            if target:
-                bb = pg.locator(target).first.bounding_box()
-                if bb: cursor(tmp, bb)
-            canvas(tmp, os.path.join(OUT, f'{name}.png')); os.remove(tmp)
-        def hover(f):
-            pg.hover(f'[data-testid=cell-{f}]')
-        snap('C1')                                         # c1 카톡 요청 열림(칸 채워짐)
-        snap('C2')                                         # c2
-        snap('C3', '[data-testid=cell-tonnage]')           # c3 칸 채워짐
-        hover('pickup'); snap('C4', '[data-testid=cell-pickup]')   # c4 상차지 근거 표시
-        hover('pickupDate'); snap('C5', '[data-testid=cell-pickupDate]')  # c5 날짜 계산
+            im = _img(tmp); os.remove(tmp)
+            box = None
+            if zoom == 'left': bb = bbox('.pane.left'); box = (bb['x'] - 8, bb['y'] - 8, bb['width'] + 16, bb['height'] + 16)
+            if zoom == 'right': bb = bbox('.pane.right'); box = (bb['x'] - 8, bb['y'] - 8, bb['width'] + 16, bb['height'] + 16)
+            canvas, r, off = _fit(im, box)
+            origin = (box[0], box[1]) if box else (0, 0)
+            if spot:
+                canvas = _spot(canvas, [bbox(x) for x in spot if pg.locator(x).count()], r, off, origin)
+            if cursor_on:
+                canvas_d = canvas
+                _mark_cursor(canvas_d, [bbox(x) for x in cursor_on], r, off, origin)
+            if zoom:
+                from PIL import ImageFont
+                d2 = ImageDraw.Draw(canvas)
+                fnt = ImageFont.truetype(os.path.join(FONT_DIR, 'Pretendard-Bold.otf'), 26)
+                txt = '합성 문서 시연 · 현장 실증 없음'
+                w = d2.textlength(txt, font=fnt)
+                d2.rounded_rectangle([1920 - 48 - w - 40, 28, 1920 - 48, 28 + 48], radius=20, fill=(255, 244, 230))
+                d2.text((1920 - 48 - w - 20, 36), txt, font=fnt, fill=(156, 79, 0))
+            canvas.save(os.path.join(OUT, f'{name}.png'))
+        cell = lambda f: f'[data-testid=cell-{f}]'
+        snap('C1')
+        snap('C2', zoom='left')
+        snap('C3', zoom='right')
+        pg.hover(cell('pickup')); snap('C4', spot=[cell('pickup'), 'mark.on'], cursor_on=[cell('pickup')])
+        pg.hover(cell('pickupDate')); snap('C5', spot=[cell('pickupDate'), 'mark.on'], cursor_on=[cell('pickupDate')])
         for i, f in enumerate(['pickup', 'dropoff', 'pickupDate', 'pickupTime', 'tonnage']):
-            pg.click(f'[data-testid=approve-{f}]'); snap(f'C6_{i}', f'[data-testid=cell-{f}]')
-        snap('C6_5', '[data-testid=confirm]')              # 올리기 켜짐
-        pg.click('[data-testid=confirm]'); pg.mouse.move(5, 5); snap('C7')  # 결과
-        pg.select_option('[data-testid=sample]', index=1); pg.mouse.move(5, 5)   # d05 말이 바뀐 요청
+            pg.click(f'[data-testid=approve-{f}]'); snap(f'C6_{i}', cursor_on=[cell(f)])
+        snap('C6_5', cursor_on=['[data-testid=confirm]'], spot=['[data-testid=confirm]'])
+        pg.click('[data-testid=confirm]'); pg.mouse.move(5, 5); snap('C7', zoom='right')
+        pg.select_option('[data-testid=sample]', index=1); pg.mouse.move(5, 5)
         snap('C8')
-        hover('dropoff'); snap('C9', '[data-testid=cell-dropoff]')
-        pg.click('[data-testid=choose-dropoff-1]'); snap('C10', '[data-testid=cell-dropoff]')
-        pg.select_option('[data-testid=sample]', index=4); pg.mouse.move(5, 5)   # d11 시각 빠진 요청
+        pg.hover(cell('dropoff')); snap('C9', spot=[cell('dropoff'), '.doc'], cursor_on=[cell('dropoff')])
+        pg.click('[data-testid=choose-dropoff-1]'); snap('C10', spot=[cell('dropoff')], cursor_on=[cell('dropoff')])
+        pg.select_option('[data-testid=sample]', index=4); pg.mouse.move(5, 5)
         snap('C11')
-        hover('pickupTime'); snap('C12', '[data-testid=cell-pickupTime]')
-        pg.fill('[data-testid=in-pickupTime]', '10:00'); snap('C13a', '[data-testid=in-pickupTime]')
-        pg.click('[data-testid=manual-pickupTime]'); snap('C13', '[data-testid=cell-pickupTime]')
+        pg.hover(cell('pickupTime')); snap('C12', spot=[cell('pickupTime')], cursor_on=[cell('pickupTime')])
+        pg.fill('[data-testid=in-pickupTime]', '10:00'); snap('C13a', spot=[cell('pickupTime')], cursor_on=['[data-testid=in-pickupTime]'])
+        pg.click('[data-testid=manual-pickupTime]'); snap('C13', spot=[cell('pickupTime')], cursor_on=[cell('pickupTime')])
         print('page errors', errs)
         b.close()
 
