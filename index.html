@@ -32,6 +32,10 @@
     <div id="cells" class="cells"></div>
     <button id="confirm" class="primary" disabled data-testid="confirm">배차표에 올리기</button>
     <div id="result" class="result" hidden data-testid="result"></div>
+    <div id="ledger" class="ledger" hidden>
+      <span class="hint" id="ledgerCount" data-testid="ledger-count"></span>
+      <button id="export" class="ghost" data-testid="export">엑셀(CSV)로 내보내기</button>
+    </div>
   </section>
 </main>
 <script type="module" src="src/infrastructure/web/app.js"></script>

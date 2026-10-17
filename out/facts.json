@@ -35,5 +35,27 @@
     "error_cost_won": 110000,
     "breakeven_errors_per_month": 0.54
   },
-  "required_cells_per_order": 5
+  "required_cells_per_order": 5,
+  "flow": {
+    "docs": 57,
+    "manual_steps": 6,
+    "tool_steps_mean": 6,
+    "approve_mean": 4.23,
+    "choose_mean": 0.25,
+    "manual_mean": 0.53,
+    "cited_mean": 4.23,
+    "blind_wrong_cells": 0,
+    "docs_with_wrong": 0,
+    "manual_error": "미측정",
+    "manual_time": "미측정"
+  },
+  "market": {
+    "freight_firms": 414344,
+    "freight_workers": 791582,
+    "year": 2024,
+    "workers_per_firm": 1.9,
+    "source": "2024년 운수업조사 결과(잠정) 보도자료 — mods.go.kr(경제통계국 산업통계과), 2025-12-11 배포, 「화물운송업 주요 지표」 표(10쪽)",
+    "url": "https://mods.go.kr/boardDownload.es?bid=238&list_no=442368&seq=1",
+    "quote": "화물운송업은 기업체수(-1.2%) 감소, 종사자수(18.9%), 매출액(14.4%) 증가 ○기업체수 41만 4천개, 종사자수 79만 2천명, 매출액은 122조원"
+  }
 }

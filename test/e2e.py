@@ -23,6 +23,15 @@ with serve() as base, sync_playwright() as p:
     res['confirm_enabled_after_5'] = not pg.is_disabled('[data-testid=confirm]')
     pg.click('[data-testid=confirm]')
     res['result_text'] = pg.inner_text('[data-testid=result]')
+    # 1b 올린 배차표를 CSV로 내보내기
+    res['ledger_text'] = pg.inner_text('[data-testid=ledger-count]')
+    with pg.expect_download() as dl:
+        pg.click('[data-testid=export]')
+    path = dl.value.path()
+    raw = open(path, 'rb').read()
+    res['csv_bom'] = raw[:3] == b'\xef\xbb\xbf'
+    res['csv_text'] = raw.decode('utf-8-sig')
+    res['csv_name'] = dl.value.suggested_filename
     # 2 충돌 후보 고르기
     pg.select_option('[data-testid=sample]', index=1)  # d05
     res['conflict_status'] = pg.get_attribute('[data-testid=cell-dropoff]', 'data-status')
@@ -49,7 +58,7 @@ with serve() as base, sync_playwright() as p:
 ok = (res['confirm_disabled_at_start'] and res['confirm_disabled_after_4'] and res['confirm_enabled_after_5']
       and '배차표에 올렸어요' in res['result_text'] and '품목' not in res['result_text'] and res['conflict_status'] == 'conflict' and res['conflict_after_choose'] == 'approved'
       and res['empty_status'] == 'empty' and '사람이 직접 입력' in res['manual_text'] and '양산' in res['own_pickup'] and '2.5' in res['own_tonnage']
-      and res['no_hscroll_390'] and not res['console_errors'])
+      and res['csv_bom'] and res['csv_name'] == '배차표.csv' and '마산,인천,2026-10-20 09:00,1' in res['csv_text'] and '1건' in res['ledger_text'] and res['no_hscroll_390'] and not res['console_errors'])
 res['pass'] = bool(ok)
 os.makedirs(os.path.join(HERE, '..', 'out'), exist_ok=True)
 json.dump(res, open(os.path.join(HERE, '..', 'out', 'e2e.json'), 'w'), ensure_ascii=False, indent=1)

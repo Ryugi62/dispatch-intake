@@ -68,3 +68,6 @@ body.compact .cell>div:nth-child(2)>div:first-child{white-space:nowrap}
 body.compact .cells.done{display:none}
 body.compact .doc{min-height:160px}
 body.compact h2{font-size:1.25rem}
+.ledger{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap}
+body.compact .notice{display:none}
+body.compact .ledger{margin-top:8px}

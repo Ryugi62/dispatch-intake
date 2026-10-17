@@ -7,6 +7,7 @@ import { HELDOUT3 } from '../samples/heldout3.js';
 import { ruleExtract } from '../src/adapters/ruleExtractor.js';
 import { measure } from '../src/application/measure.js';
 import { intake } from '../src/application/intake.js';
+import { measureFlow } from '../src/application/flow.js';
 
 const REQ = ['pickup', 'dropoff', 'pickupDate', 'pickupTime', 'tonnage'];
 const all = [...DEV, ...HELDOUT, ...HELDOUT2, ...HELDOUT3];
@@ -33,6 +34,8 @@ const fr = JSON.parse(readFileSync(new URL('../samples/first-run.json', import.m
 const first = fr.sets.reduce((a, s) => ({ docs: a.docs + s.docs, cells: a.cells + s.cells, correct: a.correct + s.correct, handoff: a.handoff + s.handoff, blank: a.blank + s.blank, wrong: a.wrong + s.wrong }), { docs: 0, cells: 0, correct: 0, handoff: 0, blank: 0, wrong: 0 });
 const pct = (a, b) => Math.round((a / b) * 1000) / 10;
 
+const stats = JSON.parse(readFileSync(new URL('../samples/official-stats.json', import.meta.url), 'utf8')).freight;
+const flow = measureFlow(all, ruleExtract);
 const PRICE_MONTH = 59000; // 제안 가격(가정): 사무직원 1석 월 구독
 const ERROR_COST = 110000; // 가정: 오기 1건 = 1톤 용달 평균 견적 11만 원(숨고 안내글) 한 건분 재운행 손실
 const facts = {
@@ -45,6 +48,8 @@ const facts = {
   liar: { cells: liarTotal, rejected: liarRejected, filled: liarFilled },
   price: { month_won: PRICE_MONTH, per_seat: 1, monthly_orders_cap: 300, error_cost_won: ERROR_COST, breakeven_errors_per_month: Math.round((PRICE_MONTH / ERROR_COST) * 100) / 100 },
   required_cells_per_order: REQ.length,
+  flow,
+  market: { freight_firms: stats.firms, freight_workers: stats.workers, year: stats.year, workers_per_firm: Math.round((stats.workers / stats.firms) * 10) / 10, source: stats.source, url: stats.url, quote: stats.quote },
 };
 mkdirSync(new URL('../out/', import.meta.url), { recursive: true });
 writeFileSync(new URL('../out/facts.json', import.meta.url), JSON.stringify(facts, null, 2) + '\n');

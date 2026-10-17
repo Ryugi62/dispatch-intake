@@ -3,6 +3,7 @@ import { ruleExtract } from '../../adapters/ruleExtractor.js';
 import { intake } from '../../application/intake.js';
 import { approveField, chooseCandidate, manualEntry, confirmOrder, pendingFields } from '../../domain/order.js';
 import { FIELDS, REQUIRED } from '../../domain/fields.js';
+import { toCsv } from '../../domain/export.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
@@ -15,6 +16,7 @@ let doc = null;
 let order = null;
 let active = null;
 let result = null;
+const ledger = []; // 올린 배차표 행 — 내보내기 대상(브라우저 안에만 있음)
 
 function load(d) {
   doc = d;
@@ -76,6 +78,8 @@ function render() {
     if (result.row.cargo) rows.push(['품목', result.row.cargo, cit.cargo]);
     r.innerHTML = `<h3>배차표에 올렸어요</h3><table>${rows.map(([k, v, c]) => `<tr><td>${k}</td><td><b>${esc(String(v))}</b></td><td class="hint">원문 「${esc(String(c))}」</td></tr>`).join('')}</table>`;
   } else r.hidden = true;
+  $('ledger').hidden = ledger.length === 0;
+  $('ledgerCount').textContent = `오늘 올린 배차표 ${ledger.length}건`;
 }
 
 function on(sel, ev, fn) { document.addEventListener(ev, (e) => { const t = e.target.closest(sel); if (t) fn(t, e); }); }
@@ -95,7 +99,16 @@ on('[data-cell]', 'mouseover', (t) => {
   $('doc').innerHTML = docHtml();
   document.querySelectorAll('.cell').forEach((c) => c.classList.toggle('active', c.dataset.cell === active));
 });
-$('confirm').addEventListener('click', () => { result = confirmOrder(order); render(); });
+$('confirm').addEventListener('click', () => { result = confirmOrder(order); ledger.push(result); render(); });
+$('export').addEventListener('click', () => {
+  const blob = new Blob(['\uFEFF' + toCsv(ledger)], { type: 'text/csv;charset=utf-8' }); // BOM: 엑셀에서 한글이 깨지지 않게
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '배차표.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+});
 $('sample').addEventListener('change', (e) => load(samples[Number(e.target.value)]));
 $('ownGo').addEventListener('click', () => {
   const text = $('ownText').value;

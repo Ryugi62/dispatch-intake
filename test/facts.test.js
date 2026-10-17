@@ -25,3 +25,13 @@ test('measure.js 실행 결과: 거짓 추출기 100% 거부 · 현재 조용한
   assert.equal(f.current.quotes_ok, f.current.quotes_checked);
   assert.equal(f.first_run_unseen.wrong, 4);
 });
+
+test('facts.json에 처리 흐름 실측과 공식 통계(1.9명)가 들어간다', () => {
+  const f = JSON.parse(execFileSync('node', [new URL('../scripts/measure.js', import.meta.url).pathname], { encoding: 'utf8' }));
+  assert.equal(f.flow.docs, 57);
+  assert.equal(f.flow.blind_wrong_cells, 0);
+  assert.equal(f.flow.manual_error, '미측정');
+  assert.equal(f.market.freight_firms, 414344);
+  assert.equal(f.market.workers_per_firm, 1.9);
+  assert.match(f.market.url, /^https:\/\/mods\.go\.kr\//);
+});
