@@ -1,0 +1,7 @@
+node_modules
+out/shots/
+__pycache__/
+video/_cache/
+video/frames/
+video/audio/
+video/build/

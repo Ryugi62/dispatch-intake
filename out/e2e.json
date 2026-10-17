@@ -2,7 +2,7 @@
  "confirm_disabled_at_start": true,
  "confirm_disabled_after_4": true,
  "confirm_enabled_after_5": true,
- "result_text": "배차표에 올렸어요\n상차지\t마산\t원문 「마산」\n하차지\t인천\t원문 「인천」\n상차 일시\t2026-10-20 09:00\t원문 「내일 + 오전 9시」\n톤수\t1톤\t원문 「1톤」\n품목\t-\t원문 「-」",
+ "result_text": "배차표에 올렸어요\n상차지\t마산\t원문 「마산」\n하차지\t인천\t원문 「인천」\n상차 일시\t2026-10-20 09:00\t원문 「내일 + 오전 9시」\n톤수\t1톤\t원문 「1톤」",
  "conflict_status": "conflict",
  "conflict_after_choose": "approved",
  "empty_status": "empty",

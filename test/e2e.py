@@ -47,7 +47,7 @@ with serve() as base, sync_playwright() as p:
     b.close()
 
 ok = (res['confirm_disabled_at_start'] and res['confirm_disabled_after_4'] and res['confirm_enabled_after_5']
-      and '배차표에 올렸어요' in res['result_text'] and res['conflict_status'] == 'conflict' and res['conflict_after_choose'] == 'approved'
+      and '배차표에 올렸어요' in res['result_text'] and '품목' not in res['result_text'] and res['conflict_status'] == 'conflict' and res['conflict_after_choose'] == 'approved'
       and res['empty_status'] == 'empty' and '사람이 직접 입력' in res['manual_text'] and '양산' in res['own_pickup'] and '2.5' in res['own_tonnage']
       and res['no_hscroll_390'] and not res['console_errors'])
 res['pass'] = bool(ok)

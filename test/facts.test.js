@@ -20,6 +20,7 @@ test('measure.js 실행 결과: 거짓 추출기 100% 거부 · 현재 조용한
   const out = execFileSync('node', [new URL('../scripts/measure.js', import.meta.url).pathname], { encoding: 'utf8' });
   const f = JSON.parse(out);
   assert.equal(f.liar.rejected, f.liar.cells);
+  assert.equal(f.liar.filled, 0);
   assert.equal(f.current.wrong, 0);
   assert.equal(f.current.quotes_ok, f.current.quotes_checked);
   assert.equal(f.first_run_unseen.wrong, 4);

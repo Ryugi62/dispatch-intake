@@ -25,7 +25,8 @@
   },
   "liar": {
     "cells": 228,
-    "rejected": 228
+    "rejected": 228,
+    "filled": 0
   },
   "price": {
     "month_won": 59000,

@@ -21,10 +21,12 @@ const liar = (d) => [
 ];
 let liarTotal = 0;
 let liarRejected = 0;
+let liarFilled = 0;
 for (const d of all) {
   const o = intake(d, liar);
   liarTotal += 4;
   liarRejected += o.rejected.length;
+  liarFilled += ['pickup', 'dropoff', 'tonnage', 'pickupDate'].filter((id) => o.fields[id].status !== 'empty').length;
 }
 
 const fr = JSON.parse(readFileSync(new URL('../samples/first-run.json', import.meta.url), 'utf8'));
@@ -40,7 +42,7 @@ const facts = {
   cells_total: cur.cells,
   current: { correct: cur.correct, handoff: cur.handoff, blank: cur.blank, wrong: cur.wrong, accuracy_pct: pct(cur.correct, cur.cells), quotes_checked: cur.quotesChecked, quotes_ok: cur.quotesOk },
   first_run_unseen: { ...first, accuracy_pct: pct(first.correct, first.cells), handoff_pct: pct(first.handoff, first.cells), wrong_pct: pct(first.wrong, first.cells) },
-  liar: { cells: liarTotal, rejected: liarRejected },
+  liar: { cells: liarTotal, rejected: liarRejected, filled: liarFilled },
   price: { month_won: PRICE_MONTH, per_seat: 1, monthly_orders_cap: 300, error_cost_won: ERROR_COST, breakeven_errors_per_month: Math.round((PRICE_MONTH / ERROR_COST) * 100) / 100 },
   required_cells_per_order: REQ.length,
 };

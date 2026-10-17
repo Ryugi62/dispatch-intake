@@ -67,11 +67,13 @@ function render() {
   const pend = pendingFields(order);
   $('progress').textContent = pend.length ? `필수 ${REQUIRED.length - pend.length}/${REQUIRED.length}칸 승인` : '필수 칸 전부 승인됨';
   $('confirm').disabled = pend.length > 0;
+  $('cells').classList.toggle('done', Boolean(result));
   const r = $('result');
   if (result) {
     r.hidden = false;
     const cit = result.citations;
-    const rows = [['상차지', result.row.pickup, cit.pickup], ['하차지', result.row.dropoff, cit.dropoff], ['상차 일시', result.row.pickupAt, `${cit.pickupDate} + ${cit.pickupTime}`], ['톤수', `${result.row.tonnage}톤`, cit.tonnage], ['품목', result.row.cargo ?? '-', cit.cargo ?? '-']];
+    const rows = [['상차지', result.row.pickup, cit.pickup], ['하차지', result.row.dropoff, cit.dropoff], ['상차 일시', result.row.pickupAt, `${cit.pickupDate} + ${cit.pickupTime}`], ['톤수', `${result.row.tonnage}톤`, cit.tonnage]];
+    if (result.row.cargo) rows.push(['품목', result.row.cargo, cit.cargo]);
     r.innerHTML = `<h3>배차표에 올렸어요</h3><table>${rows.map(([k, v, c]) => `<tr><td>${k}</td><td><b>${esc(String(v))}</b></td><td class="hint">원문 「${esc(String(c))}」</td></tr>`).join('')}</table>`;
   } else r.hidden = true;
 }
@@ -101,5 +103,6 @@ $('ownGo').addEventListener('click', () => {
   load({ id: 'own', channel: '카톡', receivedAt: $('ownDate').value || '2026-10-19', text });
 });
 $('sample').innerHTML = samples.map((d, i) => `<option value="${i}">${CH[d.channel]} · ${d.id}</option>`).join('');
+if (location.search.includes('compact')) document.body.classList.add('compact'); // 영상 촬영용 촘촘한 배치
 window.__demo = { load, samples, get order() { return order; } };
 load(samples[0]);
