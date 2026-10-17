@@ -11,7 +11,9 @@ export function buildOrder(doc, rawCandidates) {
   }
   const fields = {};
   for (const f of FIELDS) {
-    const cs = verified.filter((c) => c.fieldId === f.id);
+    const all = verified.filter((c) => c.fieldId === f.id);
+    // 한 인용이 다른 인용 안에 들어 있으면(예: 「파레트 6개」 ⊂ 「정밀기계 파레트 6개」) 충돌이 아니라 같은 근거 — 바깥쪽을 쓴다
+    const cs = all.filter((c) => !all.some((o) => o !== c && o.start <= c.start && o.end >= c.end && (o.end - o.start) > (c.end - c.start)));
     const distinct = [...new Map(cs.map((c) => [String(c.value), c])).values()];
     if (distinct.length === 0) fields[f.id] = { id: f.id, status: 'empty', value: null, evidence: null, candidates: [] };
     else if (distinct.length === 1) fields[f.id] = { id: f.id, status: 'proposed', value: distinct[0].value, evidence: pick(distinct[0]), candidates: distinct.map(pick2) };
