@@ -1,0 +1,11 @@
+{
+  "name": "dispatch-intake",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "facts": "node scripts/measure.js",
+    "serve": "node scripts/serve.js"
+  }
+}
