@@ -7,7 +7,7 @@ export function parseTonnage(quote) {
 }
 
 // 장소 인용 안전장치: 다른 칸의 낱말(상차·하차·시각·톤수)이나 긴 문장이 섞이면 장소가 아니다 -> 비운다(조용한 오기 방지).
-const NOT_PLACE = /상차|하차|\d{1,2}:\d{2}|오전|오후|\d+(?:\.\d+)?\s*(?:톤|t\b)|\s{2,}/;
+const NOT_PLACE = /[월화수목금토일]요일|다음\s*주|이번\s*주|주말|상차|하차|\d{1,2}:\d{2}|오전|오후|\d+(?:\.\d+)?\s*(?:톤|ton|t\b)|\s{2,}/i;
 export function parsePlace(quote) {
   const v = quote.trim();
   if (v.length < 2 || v.length > 40 || NOT_PLACE.test(v)) return null;

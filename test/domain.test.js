@@ -89,7 +89,15 @@ test('valueFromQuote는 알 수 없는 칸에 null', () => {
 test('장소 안전장치: 다른 칸 낱말이 섞인 인용은 장소가 아니다(H1 h10 조용한 오기 회귀)', () => {
   const d = doc('상차: 여수산단  하차: 광주 첨단  내일 15:30  1톤 냉동');
   const o = intake(d, ruleExtract);
-  assert.notEqual(o.fields.pickup.status, 'proposed'); // 삼킨 한 줄을 상차지로 채우지 않는다
+  assert.notEqual(o.fields.pickup.value, '여수산단  하차: 광주 첨단  내일 15:30  1톤 냉동'); // 삼킨 한 줄을 상차지로 채우지 않는다
+  assert.ok(o.fields.pickup.value === null || o.fields.pickup.value === '여수산단');
   assert.equal(valueFromQuote('pickup', '여수산단  하차: 광주 첨단'), null);
   assert.equal(valueFromQuote('pickup', '여수산단'), '여수산단');
+});
+
+test('요일 낱말은 장소가 아니다(H3 m08 조용한 오기 회귀)', () => {
+  assert.equal(valueFromQuote('pickup', '월요일'), null);
+  const o = intake(doc('월요일 상차 마산 하차 서울 3.5톤'), ruleExtract);
+  assert.equal(o.fields.pickup.value, '마산');
+  assert.equal(o.fields.pickupDate.status, 'empty'); // 요일만으로는 날짜를 확정하지 않는다
 });
