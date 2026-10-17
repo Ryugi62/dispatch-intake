@@ -1,0 +1,15 @@
+{
+ "url": "https://ryugi62.github.io/dispatch-intake/",
+ "status": 200,
+ "own_cells": {
+  "pickup": "양산 승인 대기",
+  "dropoff": "울산 승인 대기",
+  "pickupDate": "2026-10-21 승인 대기",
+  "pickupTime": "15:00 승인 대기",
+  "tonnage": "2.5톤 승인 대기"
+ },
+ "confirm_disabled_before": true,
+ "result": "배차표에 올렸어요\n상차지\t양산\t원문 「양산」\n하차지\t울산\t원문 「울산」\n상차 일시\t2026-10-21 15:00\t원문 「모레 + 오후 3시」\n톤수\t2.5톤\t원문 「2.5톤」",
+ "console_errors": [],
+ "pass": true
+}

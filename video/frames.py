@@ -67,7 +67,7 @@ KAKAO = "사장님 내일 오전 9시 마산 상차, 인천 하차 1톤 가능�
 def sheet(rows, note=""):
     tr = ''.join(f"<tr>{''.join(c for c in r)}</tr>" for r in rows)
     return f"<div class='card' style='flex:1'><div class='sub' style='margin:0 0 8px'>배차표(엑셀)에 손으로 입력</div><table><tr><th>상차지</th><th>하차지</th><th>일시</th><th>톤수</th></tr>{tr}</table>{note}</div>"
-CARDS['A1'] = page(f"<div class='eyebrow'>소형 운송사 사무실</div><h1>카톡 요청을 배차표에 손으로 옮겨 적습니다</h1><div class='row'><div class='card fill' style='flex:1'><div class='sub' style='margin:0 0 16px'>화주 카톡</div><div class='bubble'>{esc(KAKAO)}</div></div>{sheet([['<td class=mut>&nbsp;</td>']*4])}</div><div class='src' style='font-size:26px;margin-top:24px'>근거: 화물 주선사 채용공고(더팀스 · 동부전국화물, 8명 규모) 「화주로부터 전화 및 메세지를 통해 오더 접수 → 오더 입력 → 배차 진행」 · 2026-10-18 열람</div>", extra_chip="<div class='chip stage' style='top:96px'>연출 · 지어낸 장면</div>")
+CARDS['A1'] = page(f"<div class='eyebrow'>소형 운송사 사무실</div><h1>카톡 요청을 배차표에 손으로 옮겨 적습니다</h1><div class='row'><div class='card fill' style='flex:1'><div class='sub' style='margin:0 0 16px'>화주 카톡</div><div class='bubble'>{esc(KAKAO)}</div></div>{sheet([['<td class=mut>&nbsp;</td>']*4])}</div><div class='src' style='font-size:26px;margin-top:24px'>근거: 화물 주선사 채용공고(더팀스 · 동부전국화물, 8명 규모) 「화주로부터 전화 및 메세지를 통해 오더 접수 → 오더 입력 → 배차 진행」 · 2026-10-18 열람</div><div class='src' style='font-size:30px;margin-top:12px;color:#1B64DA;font-weight:700'>직접 열어 보기 · ryugi62.github.io/dispatch-intake (설치·로그인 없음)</div>", extra_chip="<div class='chip stage' style='top:96px'>연출 · 지어낸 장면</div>")
 _k2 = esc(KAKAO).replace('인천', "<span class='hl'>인천</span>")
 _note2 = "<div class='mid' style='color:#9C4F00;margin-top:24px'>카톡엔 인천, 배차표엔 부천</div>"
 _row2 = [["<td>마산</td>", "<td class='warn'>부천</td>", "<td>10/20 09:00</td>", "<td>1톤</td>"]]
@@ -152,7 +152,7 @@ CARDS['G1'] = page(gtable(1))
 CARDS['G2'] = page(gtable(2))
 CARDS['G3'] = page(gtable(3))
 CARDS['G4'] = page(gtable(4))
-CARDS['G5'] = page("<div style='position:absolute;left:0;right:0;top:120px;text-align:center'><div class='eyebrow'>지금</div><h1 style='font-size:80px'>합성 문서 시연까지</h1><div class='sub' style='font-size:44px;margin-top:28px'>다음 첫 숫자 = 현장 실증 (실제 요청 100건)</div><div class='src' style='margin-top:40px'>추출기 규칙 기반 · 합성 문서 57건 · 파일럿 운송사 없음</div></div>")
+CARDS['G5'] = page("<div style='position:absolute;left:0;right:0;top:120px;text-align:center'><div class='eyebrow'>지금</div><h1 style='font-size:80px'>합성 문서 시연까지</h1><div class='sub' style='font-size:44px;margin-top:28px'>다음 첫 숫자 = 현장 실증 (실제 요청 100건)</div><div class='src' style='margin-top:40px'>추출기 규칙 기반 · 합성 문서 57건 · 파일럿 운송사 없음</div><div class='src' style='font-size:36px;color:#1B64DA;font-weight:700'>직접 열어 보기 · ryugi62.github.io/dispatch-intake</div></div>")
 
 def render_cards():
     import re as _re
